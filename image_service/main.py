@@ -1,13 +1,14 @@
 import os
 import logging
+import shutil
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 
 from internal.routers import images
 from internal.image_service.image_service import ImageService
 from internal.storage_service_client_interface import StorageServiceClientInterface
 from internal.storage_service_client.storage_service_client import StorageServiceClient
-
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -16,6 +17,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+if not os.path.isfile("./.env") and os.path.isfile("./.env.example"):
+    shutil.copyfile("./.env.example", "./.env")
+    # TODO: decide if this should be a warning or not
+    logger.info("Created .env file with default values from .env.example")
+
+load_dotenv()
+logger.info("Loaded environment variables from .env file")
+
+log_level = os.getenv('LOG_LEVEL', 'INFO')
+logger.setLevel(log_level)
 
 app = FastAPI()
 logger.info("Successfully initialized FastAPI app")
