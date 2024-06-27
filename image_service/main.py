@@ -1,14 +1,14 @@
-import os
 import logging
+import os
 import shutil
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
-from internal.routers import images
 from internal.image_service.image_service import ImageService
-from internal.storage_service_client_interface import StorageServiceClientInterface
+from internal.routers import images
 from internal.storage_service_client.storage_service_client import StorageServiceClient
+from internal.storage_service_client_interface import StorageServiceClientInterface
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -22,7 +22,10 @@ if not os.path.isfile("./.env") and os.path.isfile("./.env.example"):
     # TODO: decide if this should be a warning or not
     logger.info("Created .env file with default values from .env.example")
 
-load_dotenv()
+load_dotenv(
+    dotenv_path="./.env",
+    override=False,
+)
 logger.info("Loaded environment variables from .env file")
 
 log_level = os.getenv('LOG_LEVEL', 'INFO')
@@ -48,4 +51,4 @@ image_router = images.get_router(
 )
 
 app.include_router(image_router)
-logger.info("Successfully included image service router")
+logger.info("Successfully included image service router, starting up..")
