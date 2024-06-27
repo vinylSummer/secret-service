@@ -1,13 +1,47 @@
+import logging
+import os
+
 from fastapi import FastAPI
 
+from internal.routers import meme
+from internal.meme_service_interface import MemeServiceInterface
+from internal.meme_service.meme_service import MemeServiceV1
+from internal.image_service_client_interface import ImageServiceClientInterface
+from internal.db_service_client_interface import DatabaseServiceClientInterface
+
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO,
+    force=True
+)
+logger = logging.getLogger(__name__)
+
+
 app = FastAPI()
+logger.info("Successfully initialized FastAPI app")
 
+assert "IMAGE_SERVICE_ENDPOINT" in os.environ, "IMAGE_SERVICE_ENDPOINT environment variable must be set"
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+image_service_endpoint = os.environ["IMAGE_SERVICE_ENDPOINT"]
+# TODO: add real implementation
+image_service_client: ImageServiceClientInterface
+logger.info("Successfully initialized image service client")
 
+assert "DB_SERVICE_ENDPOINT" in os.environ, "DB_SERVICE_ENDPOINT environment variable must be set"
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+database_service_endpoint = os.environ["DB_SERVICE_ENDPOINT"]
+# TODO: add real implementation
+database_service_client: DatabaseServiceClientInterface
+logger.info("Successfully initialized database service client")
+
+service: MemeServiceInterface = MemeServiceV1(
+    image_service_client=image_service_client,
+    db_service_client=database_service_client,
+)
+logger.info("Successfully initialized Meme Service")
+
+meme_router = meme.get_router(service)
+
+app.include_router(meme_router)
+logger.info("Successfully included meme service API router")
