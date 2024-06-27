@@ -7,7 +7,9 @@ from internal.routers import meme
 from internal.meme_service_interface import MemeServiceInterface
 from internal.meme_service.meme_service import MemeServiceV1
 from internal.image_service_client_interface import ImageServiceClientInterface
+from internal.image_service_client.image_service_client import ImageServiceClient
 from internal.db_service_client_interface import DatabaseServiceClientInterface
+from internal.db_service_client.db_service_client import DatabaseServiceClient
 
 
 logging.basicConfig(
@@ -24,15 +26,17 @@ logger.info("Successfully initialized FastAPI app")
 assert "IMAGE_SERVICE_ENDPOINT" in os.environ, "IMAGE_SERVICE_ENDPOINT environment variable must be set"
 
 image_service_endpoint = os.environ["IMAGE_SERVICE_ENDPOINT"]
-# TODO: add real implementation
-image_service_client: ImageServiceClientInterface
+image_service_client: ImageServiceClientInterface = ImageServiceClient(
+    image_service_endpoint=image_service_endpoint,
+)
 logger.info("Successfully initialized image service client")
 
 assert "DB_SERVICE_ENDPOINT" in os.environ, "DB_SERVICE_ENDPOINT environment variable must be set"
 
 database_service_endpoint = os.environ["DB_SERVICE_ENDPOINT"]
-# TODO: add real implementation
-database_service_client: DatabaseServiceClientInterface
+database_service_client: DatabaseServiceClientInterface = DatabaseServiceClient(
+    db_service_endpoint=database_service_endpoint,
+)
 logger.info("Successfully initialized database service client")
 
 service: MemeServiceInterface = MemeServiceV1(
