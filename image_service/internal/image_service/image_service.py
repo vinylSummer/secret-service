@@ -1,24 +1,24 @@
 from internal.image_service_interface import ImageServiceInterface
-from internal.s3_client_interface import S3ClientInterface
+from internal.storage_service_client_interface import StorageServiceClientInterface
 from internal.errors.errors import KeyDoesNotExistError, ImageDoesNotExistError
 from models.image import Image
 
 
 class ImageService(ImageServiceInterface):
-    s3_client: S3ClientInterface
+    storage_service_client: StorageServiceClientInterface
 
-    def __init__(self, s3_client: S3ClientInterface):
-        self.s3_client = s3_client
+    def __init__(self, storage_service_client: StorageServiceClientInterface):
+        self.storage_service_client = storage_service_client
 
     def create_image(self, image: Image):
-        self.s3_client.create_data(
+        self.storage_service_client.create_data(
             key=image.image_id,
             b64_data=image.b64_data,
         )
 
     def retrieve_image(self, image_id: str) -> Image:
         try:
-            image_b64_data = self.s3_client.retrieve_data(
+            image_b64_data = self.storage_service_client.retrieve_data(
                 key=image_id,
             )
         except KeyDoesNotExistError as e:
@@ -34,7 +34,7 @@ class ImageService(ImageServiceInterface):
 
     def delete_image(self, image_id: str):
         try:
-            self.s3_client.delete_data(
+            self.storage_service_client.delete_data(
                 key=image_id,
             )
         except KeyDoesNotExistError as e:

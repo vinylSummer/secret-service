@@ -5,7 +5,7 @@ from fastapi import FastAPI
 
 from internal.routers import images
 from internal.image_service.image_service import ImageService
-from internal.s3_client_interface import S3ClientInterface
+from internal.storage_service_client_interface import StorageServiceClientInterface
 
 
 logging.basicConfig(
@@ -22,7 +22,7 @@ logger.info("Successfully initialized FastAPI app")
 s3_endpoint: str = os.getenv("S3_ENDPOINT")
 assert s3_endpoint is not None, "S3_ENDPOINT environment variable must be set"
 # TODO: add real implementation
-s3_client: S3ClientInterface
+storage_service_client: StorageServiceClientInterface
 logger.info("Successfully initialized S3 client")
 
 service = ImageService()

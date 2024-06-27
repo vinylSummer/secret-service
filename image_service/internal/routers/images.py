@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, HTTPException
 
-from routers.dto.images import (CreateImageRequest, CreateImageResponse,
+from internal.routers.dto.images import (CreateImageRequest, CreateImageResponse,
                                 GetImageResponse,
                                 UpdateImageRequest)
 from internal.image_service_interface import ImageServiceInterface

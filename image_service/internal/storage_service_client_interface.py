@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class S3ClientInterface(ABC):
+class StorageServiceClientInterface(ABC):
     @abstractmethod
     def create_data(self, key: str, b64_data: str):
         ...
