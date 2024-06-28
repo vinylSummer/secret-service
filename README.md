@@ -29,7 +29,7 @@ Bucket name should be specified as an env variable and can't be changed without 
 ## Usage
 Clone this repo to your local machine:
 ```shell
-git clone https://gitlab.com/vinyl_summer/goofymemeservice.git && cd goofymemeservice
+git clone https://gitlab.com/vinyl_summer/goofy-meme-service.git && cd goofy-meme-service
 ```
 ### 1. Set up environment variables.
 (For development purposes you can use .env file, see .env.example for each microservice)
