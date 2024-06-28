@@ -19,8 +19,7 @@ logger = logging.getLogger(__name__)
 
 if not os.path.isfile("./.env") and os.path.isfile("./.env.example"):
     shutil.copyfile("./.env.example", "./.env")
-    # TODO: decide if this should be a warning or not
-    logger.info("Created .env file with default values from .env.example")
+    logger.warning("Created .env file with default values from .env.example")
 
 load_dotenv(
     dotenv_path="./.env",
